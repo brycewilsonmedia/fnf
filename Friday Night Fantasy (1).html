@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Friday Night Fantasy</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#e8e9eb;--card:#fff;--ink:#1a1a1a;--mute:#6c6d6f;--line:#dcdddf;--turf:#cc0000;--gold:#cc0000;--goldink:#fff;--warn:#b3401f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121212;--card:#1e1e1e;--ink:#f2f2f2;--mute:#a0a0a0;--line:#333;--turf:#e53935;--gold:#e53935;--goldink:#fff;--warn:#ff8a65}}
+:root[data-theme="dark"]{--bg:#121212;--card:#1e1e1e;--ink:#f2f2f2;--mute:#a0a0a0;--line:#333;--turf:#e53935;--gold:#e53935;--goldink:#fff;--warn:#ff8a65}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:900px;margin:0 auto;padding:20px 16px 48px}
+h1,h2,h3{font-family:Oswald,Impact,"Arial Narrow",sans-serif;font-weight:700;margin:0;letter-spacing:.01em}
+h1{font-size:34px}h2{font-size:22px;margin-bottom:10px}h3{font-size:18px}
+.sub{color:var(--mute);margin:2px 0 16px}
+.tabs{display:flex;gap:6px;border-bottom:2px solid var(--line);margin-bottom:18px;overflow-x:auto}
+.tab{background:none;border:0;color:var(--mute);font:500 17px Oswald,sans-serif;padding:10px 14px;cursor:pointer;border-bottom:4px solid transparent;margin-bottom:-2px;white-space:nowrap}
+.tab[aria-selected=true]{color:var(--ink);border-bottom-color:var(--gold)}
+.tab:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px}
+.grow{flex:1;min-width:0}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td,th{padding:7px 4px;text-align:left;border-top:1px solid var(--line)}
+th{font-weight:600;color:var(--mute);font-size:13px;border-top:0}
+td.n,th.n{text-align:right}
+.pos{display:inline-block;min-width:34px;text-align:center;background:var(--turf);color:#fff;border-radius:4px;font-size:12px;font-weight:700;padding:1px 4px}
+.tag{background:var(--gold);color:var(--goldink);border-radius:4px;font-size:11px;font-weight:700;padding:1px 5px;margin-left:6px}
+label{display:block;font-size:14px;font-weight:600;margin-bottom:10px}
+input,select{width:100%;padding:9px 10px;margin-top:4px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit}
+.btn{background:var(--turf);color:#fff;border:0;border-radius:6px;padding:10px 16px;font:600 15px system-ui;cursor:pointer}
+.btn.gold{background:var(--gold);color:var(--goldink)}
+.btn.ghost{background:none;color:var(--ink);border:1px solid var(--line)}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:0 12px}
+.log{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:10px;font:13px/1.5 ui-monospace,Menlo,monospace;max-height:180px;overflow:auto;margin-top:12px}
+.note{font-size:14px;color:var(--mute)}
+.warn{color:var(--warn)}
+.preview{font:700 20px Oswald,sans-serif;margin:4px 0 10px}
+body{font-family:Helvetica,Arial,system-ui,sans-serif}
+h1,h2,h3,.tab,.logo{font-family:Oswald,"Arial Narrow",sans-serif}
+.top{background:#121212;color:#fff;margin-bottom:16px}
+.navbar{display:flex;align-items:center;gap:12px;padding:12px 16px 4px;max-width:1000px;margin:0 auto}
+.logo{background:#cc0000;color:#fff;font-weight:700;font-size:20px;padding:2px 8px;border-radius:3px}
+.brand{font:700 20px Oswald,sans-serif}
+.season{margin-left:auto;color:#bbb;font-size:13px}
+.top .tabs{max-width:1000px;margin:0 auto;border:0;padding:0 8px;gap:0}
+.top .tab{color:#bbb;font-size:15px}
+.top .tab[aria-selected=true]{color:#fff;border-bottom-color:#cc0000}
+.wrap{max-width:1000px;padding:0 16px 48px}
+.panel,.card{background:var(--card);border:1px solid var(--line);border-radius:4px;margin-bottom:16px}
+.card{padding:16px}
+.ph{padding:10px 14px;font:700 17px Oswald,sans-serif;border-bottom:3px solid #cc0000}
+table.st{font-size:15px}
+table.st th{background:var(--bg);font-size:12px;padding:8px 10px;color:var(--mute)}
+table.st td{padding:10px;vertical-align:middle}
+table.st tfoot td{font-weight:700;background:var(--bg)}
+.rk{font:700 18px Oswald,sans-serif;width:40px;color:var(--mute)}
+.av{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;color:#fff;font:700 13px Oswald,sans-serif;margin-right:10px;flex:none}
+.av.sq{border-radius:6px;width:56px;height:56px;font-size:20px;margin:0}
+.tn{font-weight:700}
+td.pt{font:700 20px Oswald,sans-serif}
+.team-head{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:4px;padding:14px;margin-bottom:16px}
+.team-head h2{margin:0}
+.slot{font:700 13px Oswald,sans-serif;color:var(--mute);width:56px}
+.pc{display:flex;align-items:center}
+.empty{color:var(--mute);font-style:italic}
+.grow{flex:1;min-width:0}
+.wkbar{display:flex;gap:6px;overflow-x:auto;margin-bottom:14px}
+.wk{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer;font:600 14px system-ui;white-space:nowrap}
+.wk.on{background:#cc0000;border-color:#cc0000;color:#fff}
+.sb{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.side{display:flex;align-items:center;gap:10px;padding:14px;border-left:4px solid transparent}
+.side:not(.win){opacity:.6}
+.side.win{border-left-color:#cc0000}
+.big{font:700 28px Oswald,sans-serif}
+.chk{display:flex;align-items:center;gap:8px;padding:6px 0;font-weight:400}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:520px){.cols{grid-template-columns:1fr}}
+.trade{padding:12px 14px;border-top:1px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const {useState,useMemo,useEffect,useRef}=React;const h=React.createElement;
+const RULES=[["Passing yards","1 pt per 25 yds"],["Passing TD","4 pts"],["Interception thrown","-2 pts"],["Rushing + receiving yards","1 pt per 10 yds"],["Rushing + receiving TD","6 pts"],["Reception (full PPR)","1 pt"]];
+const MGRS=[{id:"m1",name:"Maria's Marauders"},{id:"m2",name:"Big Tony FC"},{id:"m3",name:"The Blitz Kids"},{id:"m4",name:"Sunday Sleepers"}];
+// [id,name,school,pos,manager,passYds,passTD,int,rushYds,rushTD,rec,recYds,recTD]
+const RAW=[
+[1,"Jake Morales","Troy Athens","QB","m1",1850,18,5,210,3,0,0,0],
+[2,"Tyler Brooks","Birmingham Groves","RB","m1",0,0,0,1120,14,22,180,1],
+[3,"Devon Carter","Brother Rice","WR","m1",0,0,0,60,0,48,860,9],
+[4,"Luke Pappas","Rochester Adams","TE","m1",0,0,0,0,0,31,402,4],
+[5,"Ethan Walsh","Seaholm","QB","m2",2240,24,9,330,5,0,0,0],
+[6,"Marcus Reed","Detroit Cass Tech","RB","m2",0,0,0,1480,17,15,120,0],
+[7,"Isaiah Young","Clarkston","WR","m2",0,0,0,0,0,55,1010,11],
+[8,"Noah Kim","Lake Orion","TE","m2",0,0,0,0,0,27,310,3],
+[9,"Caleb Foster","Stoney Creek","QB","m3",1620,14,7,150,2,0,0,0],
+[10,"Jalen Price","Utica Eisenhower","RB","m3",0,0,0,970,10,18,140,1],
+[11,"Owen Bishop","Royal Oak","WR","m3",0,0,0,20,0,41,720,6],
+[12,"Mason Lee","Bloomfield Hills","TE","m3",0,0,0,0,0,24,288,2],
+[13,"Aiden Cruz","Novi","QB","m4",1980,20,6,260,4,0,0,0],
+[14,"Darius Webb","Southfield A&T","RB","m4",0,0,0,1305,15,12,90,0],
+[15,"Trent Hall","Troy","WR","m4",0,0,0,0,0,39,640,5],
+[16,"Cole Rivera","Warren De La Salle","WR","m4",0,0,0,44,0,36,790,7]];
+const K=["passYds","passTD","int","rushYds","rushTD","rec","recYds","recTD"];
+const LBL={passYds:"Pass yds",passTD:"Pass TD",int:"INT",rushYds:"Rush yds",rushTD:"Rush TD",rec:"Rec",recYds:"Rec yds",recTD:"Rec TD"};
+const WEEKS=6;
+// Mock data: each player's season totals are split into 6 games so weekly scoring works.
+function splitStats(s,id){
+  const w=Array.from({length:WEEKS},(_,i)=>{const x=Math.sin(id*127.1+i*311.7)*43758.5453;return .4+(x-Math.floor(x))*1.2;});
+  const sum=w.reduce((a,b)=>a+b,0),big=w.indexOf(Math.max(...w));
+  const wk=Array.from({length:WEEKS},()=>({}));
+  K.forEach(k=>{let used=0;w.forEach((x,i)=>{wk[i][k]=Math.floor(s[k]*x/sum);used+=wk[i][k];});wk[big][k]+=s[k]-used;});
+  return wk;
+}
+const sumW=wk=>{const t={};K.forEach(k=>t[k]=wk.reduce((a,x)=>a+x[k],0));return t;};
+const mk=r=>{
+  const w=splitStats({passYds:r[5],passTD:r[6],int:r[7],rushYds:r[8],rushTD:r[9],rec:r[10],recYds:r[11],recTD:r[12]},r[0]);
+  return {id:r[0],name:r[1],school:r[2],pos:r[3],mgr:r[4],manual:false,w,s:sumW(w)}; // w = weekly stats, s = season totals
+};
+// The scoring engine. Edit the numbers here to change league rules.
+function score(s){
+  const v=+(s.passYds/25+s.passTD*4-s.int*2+(s.rushYds+s.recYds)/10+(s.rushTD+s.recTD)*6+s.rec).toFixed(1);
+  return v;
+}
+const f1=n=>n.toFixed(1);
+
+const initials=n=>n.split(/[\s']+/).filter(Boolean).slice(0,2).map(w=>w[0]).join("").toUpperCase();
+const TC=["#c8102e","#0b5fa5","#2e7d32","#6a3fa0"];
+const PC={QB:"#c8102e",RB:"#0b5fa5",WR:"#2e7d32",TE:"#c77700"};
+const Av=({name,i,sq,color})=>h("span",{className:"av"+(sq?" sq":""),style:{background:color||TC[i%4]}},initials(name));
+const total=(ps,id)=>ps.filter(p=>p.mgr===id).reduce((a,p)=>a+score(p.s),0);
+const statLine=s=>[s.passYds?s.passYds+" pass yds, "+s.passTD+" TD, "+s.int+" INT":"",
+  (s.rushYds||s.rushTD)?s.rushYds+" rush yds, "+s.rushTD+" TD":"",
+  s.rec?s.rec+" rec, "+s.recYds+" yds, "+s.recTD+" TD":""].filter(Boolean).join(" · ");
+
+const PAIRS=[[["m1","m2"],["m3","m4"]],[["m1","m3"],["m2","m4"]],[["m1","m4"],["m2","m3"]]];
+const sched=w=>PAIRS[w%3];
+const wp=(ps,id,w)=>+ps.filter(p=>p.mgr===id).reduce((a,p)=>a+score(p.w[w]),0).toFixed(1);
+function records(ps){
+  const r={};MGRS.forEach(m=>r[m.id]={id:m.id,W:0,L:0,T:0,PF:0,PA:0});
+  for(let w=0;w<WEEKS;w++)sched(w).forEach(([a,b])=>{
+    const x=wp(ps,a,w),y=wp(ps,b,w);
+    r[a].PF+=x;r[a].PA+=y;r[b].PF+=y;r[b].PA+=x;
+    if(x>y){r[a].W++;r[b].L++;}else if(y>x){r[b].W++;r[a].L++;}else{r[a].T++;r[b].T++;}
+  });
+  return Object.values(r);
+}
+
+function Standings({players}){
+  const rows=records(players).map(r=>({...r,i:MGRS.findIndex(m=>m.id===r.id)})).sort((a,b)=>b.W-a.W||b.PF-a.PF);
+  return h("div",{className:"panel"},h("div",{className:"ph"},"League Standings · through Week "+WEEKS),
+    h("div",{style:{overflowX:"auto"}},h("table",{className:"st"},
+      h("thead",null,h("tr",null,h("th",null,"RK"),h("th",null,"TEAM"),h("th",{className:"n"},"W-L"+(rows.some(r=>r.T)?"-T":"")),h("th",{className:"n"},"PF"),h("th",{className:"n"},"PA"),h("th",{className:"n"},"TOTAL PTS"))),
+      h("tbody",null,rows.map((r,k)=>h("tr",{key:r.id},
+        h("td",{className:"rk"},k+1),
+        h("td",null,h("div",{className:"pc"},h(Av,{name:MGRS[r.i].name,i:r.i}),h("span",{className:"tn"},MGRS[r.i].name))),
+        h("td",{className:"n"},r.W+"-"+r.L+(r.T?"-"+r.T:"")),
+        h("td",{className:"n"},f1(r.PF)),h("td",{className:"n"},f1(r.PA)),
+        h("td",{className:"n pt"},f1(total(players,r.id)))))))));
+}
+
+function Scoreboard({players}){
+  const [wk,setWk]=useState(WEEKS-1);
+  const top=players.map(p=>({p,pts:score(p.w[wk])})).sort((a,b)=>b.pts-a.pts).slice(0,5);
+  const side=(id,sc,win)=>{const i=MGRS.findIndex(m=>m.id===id);
+    return h("div",{className:"side"+(win?" win":"")},h(Av,{name:MGRS[i].name,i}),h("div",{className:"grow tn"},MGRS[i].name),h("div",{className:"big"},f1(sc)));};
+  return h("div",null,
+    h("div",{className:"wkbar",role:"group","aria-label":"Choose week"},Array.from({length:WEEKS},(_,i)=>h("button",{key:i,className:"wk"+(i===wk?" on":""),onClick:()=>setWk(i)},"Week "+(i+1)))),
+    h("div",{className:"sb"},sched(wk).map(([a,b],k)=>{
+      const x=wp(players,a,wk),y=wp(players,b,wk);
+      return h("div",{key:k,className:"panel"},h("div",{className:"ph"},"Matchup "+(k+1)),side(a,x,x>y),side(b,y,y>x));})),
+    h("div",{className:"panel"},h("div",{className:"ph"},"Top performers · Week "+(wk+1)),
+      h("table",{className:"st"},h("tbody",null,top.map(({p,pts})=>h("tr",{key:p.id},
+        h("td",null,h("div",{className:"pc"},h(Av,{name:p.name,color:PC[p.pos]}),h("div",null,h("span",{className:"tn"},p.name),h("div",{className:"note"},p.pos+" · "+p.school)))),
+        h("td",{className:"note"},MGRS.find(m=>m.id===p.mgr).name),
+        h("td",{className:"n pt"},f1(pts))))))));
+}
+
+function lineup(ps){
+  const left=[...ps];
+  const out=["QB","RB","WR","TE"].map(sl=>{const i=left.findIndex(p=>p.pos===sl);return {slot:sl,p:i>=0?left.splice(i,1)[0]:null};});
+  out.push({slot:"FLEX",p:left.shift()||null});
+  return out.concat(left.map(p=>({slot:"BN",p})));
+}
+
+function Rosters({players,my}){
+  const [tid,setTid]=useState(my||"m1");
+  const mi=MGRS.findIndex(m=>m.id===tid),m=MGRS[mi];
+  const ps=players.filter(p=>p.mgr===tid);
+  return h("div",null,
+    h("div",{className:"team-head"},h(Av,{name:m.name,i:mi,sq:true}),
+      h("div",{className:"grow"},h("h2",null,m.name,tid===my&&h("span",{className:"tag"},"YOUR TEAM")),h("div",{className:"note"},ps.length+" athletes · "+f1(total(players,tid))+" pts")),
+      h("select",{"aria-label":"Choose team",value:tid,onChange:e=>setTid(e.target.value),style:{width:"auto"}},MGRS.map(x=>h("option",{key:x.id,value:x.id},x.name)))),
+    h("div",{className:"panel"},h("div",{className:"ph"},"Lineup"),
+      h("div",{style:{overflowX:"auto"}},h("table",{className:"st"},
+        h("thead",null,h("tr",null,h("th",null,"SLOT"),h("th",null,"PLAYER"),h("th",null,"STATS"),h("th",{className:"n"},"FPTS"))),
+        h("tbody",null,lineup(ps).map((r,k)=>r.p?h("tr",{key:k},
+          h("td",{className:"slot"},r.slot),
+          h("td",null,h("div",{className:"pc"},h(Av,{name:r.p.name,color:PC[r.p.pos]}),
+            h("div",null,h("span",{className:"tn"},r.p.name),r.p.manual&&h("span",{className:"tag"},"MANUAL"),h("div",{className:"note"},r.p.pos+" · "+r.p.school)))),
+          h("td",{className:"note"},statLine(r.p.s)),
+          h("td",{className:"n pt"},f1(score(r.p.s)))):
+          h("tr",{key:k},h("td",{className:"slot"},r.slot),h("td",{colSpan:3,className:"empty"},"Empty")))),
+        h("tfoot",null,h("tr",null,h("td",{colSpan:3},"TOTAL"),h("td",{className:"n"},f1(total(players,tid)))))))));
+}
+
+const ROUNDS=4;
+const fmt=t=>Math.floor(t/60)+":"+String(t%60).padStart(2,"0");
+const shuffle=a=>{const x=[...a];for(let i=x.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]];}return x;};
+// Snake order: round 1 goes in draft order, round 2 reverses it, and so on.
+const onClock=(n,order)=>{const r=Math.floor(n/order.length),i=n%order.length;return MGRS.find(m=>m.id===order[r%2?order.length-1-i:i]);};
+
+function Draft({players,setPlayers,picks,setPicks,order,setOrder,canRun}){
+  const [pos,setPos]=useState("ALL");
+  const [ask,setAsk]=useState(false);
+  const [rand,setRand]=useState(true);
+  const [secs,setSecs]=useState(30); // 0 = timer off
+  const [left,setLeft]=useState(30);
+  const total=ROUNDS*MGRS.length;
+  const n=picks?picks.length:0,done=picks&&n>=total;
+  const pool=players.filter(p=>!p.mgr).sort((a,b)=>score(b.s)-score(a.s));
+  const shown=pool.filter(p=>pos==="ALL"||p.pos===pos);
+  const start=()=>{if(rand)setOrder(shuffle(MGRS.map(m=>m.id)));setPlayers(ps=>ps.map(x=>({...x,mgr:null})));setPicks([]);setAsk(false);setPos("ALL");};
+  const pick=p=>{const m=onClock(n,order);setPlayers(ps=>ps.map(x=>x.id===p.id?{...x,mgr:m.id}:x));setPicks([...picks,{pid:p.id,mgr:m.id}]);};
+  const undo=()=>{const l=picks[n-1];setPlayers(ps=>ps.map(x=>x.id===l.pid?{...x,mgr:null}:x));setPicks(picks.slice(0,-1));};
+  const live=!!picks&&!done;
+  // Pick timer: resets on every pick, counts down each second, auto-picks the best player at 0.
+  React.useEffect(()=>{setLeft(secs);},[n,secs,live]);
+  React.useEffect(()=>{if(!live||!secs)return;const t=setInterval(()=>setLeft(l=>l-1),1000);return()=>clearInterval(t);},[n,secs,live]);
+  React.useEffect(()=>{if(canRun&&live&&secs&&left<=0&&pool.length)pick(pool[0]);},[left]);
+  const startBox=h("div",{className:"card"},
+    !picks&&h("p",{style:{marginTop:0}},"Run a "+ROUNDS+"-round snake draft with the "+players.length+" athletes. Starting a draft clears every roster."),
+    h("label",{style:{display:"flex",gap:8,alignItems:"center"}},h("input",{type:"checkbox",checked:rand,onChange:e=>setRand(e.target.checked),style:{width:"auto",margin:0}}),"Randomize draft order"),
+    h("label",null,"Pick timer",h("select",{value:secs,onChange:e=>setSecs(+e.target.value),style:{maxWidth:200}},h("option",{value:0},"Off"),h("option",{value:15},"15 seconds"),h("option",{value:30},"30 seconds"),h("option",{value:60},"60 seconds"))),
+    !ask?h("button",{className:"btn",onClick:()=>setAsk(true)},picks?"Restart draft":"Start new draft")
+    :h("div",null,h("p",{className:"warn",style:{marginTop:0}},"This clears all rosters and picks. Continue?"),
+      h("div",{className:"btns"},h("button",{className:"btn",onClick:start},"Yes, start draft"),h("button",{className:"btn ghost",onClick:()=>setAsk(false)},"Cancel"))));
+  if(!picks)return h("div",null,h("div",{className:"panel"},h("div",{className:"ph"},"Draft Room")),canRun?startBox:h("p",{className:"note"},"No draft is running. The commissioner starts it here, and you can watch the picks live."));
+  const cur=onClock(n,order),ci=MGRS.findIndex(m=>m.id===cur.id);
+  const names=order.map(id=>MGRS.find(m=>m.id===id).name).join(" → ");
+  return h("div",null,
+    h("div",{className:"team-head"},
+      done?h("div",{className:"grow"},h("h2",null,"Draft complete"),h("div",{className:"note"},"All "+total+" picks are in. Check My Team Rosters for lineups."))
+      :h(React.Fragment,null,h(Av,{name:cur.name,i:ci,sq:true}),
+        h("div",{className:"grow"},h("h2",null,"On the clock: "+cur.name),
+          h("div",{className:"note"},"Round "+(Math.floor(n/MGRS.length)+1)+" · Pick "+(n+1)+" of "+total+(secs&&canRun?" · Time left "+fmt(Math.max(left,0)):"")),
+          h("div",{className:"note"},"Round 1 order: "+names))),
+      h("div",{className:"btns",style:{margin:0}},
+        canRun&&!done&&h("button",{className:"btn",onClick:()=>pick(pool[0])},"Auto-pick best"),
+        canRun&&n>0&&h("button",{className:"btn ghost",onClick:undo},"Undo last pick"))),
+    !done&&h("div",{className:"panel"},h("div",{className:"ph"},"Available players ("+pool.length+")"),
+      h("div",{className:"wkbar",style:{padding:"10px 14px 0"}},["ALL","QB","RB","WR","TE"].map(x=>h("button",{key:x,className:"wk"+(pos===x?" on":""),onClick:()=>setPos(x)},x))),
+      h("div",{style:{overflowX:"auto"}},h("table",{className:"st"},
+        h("thead",null,h("tr",null,h("th",null,"PLAYER"),h("th",{className:"n"},"SEASON PTS"),h("th",null,""))),
+        h("tbody",null,shown.length?shown.map(p=>h("tr",{key:p.id},
+          h("td",null,h("div",{className:"pc"},h(Av,{name:p.name,color:PC[p.pos]}),h("div",null,h("span",{className:"tn"},p.name),h("div",{className:"note"},p.pos+" · "+p.school)))),
+          h("td",{className:"n pt"},f1(score(p.s))),
+          h("td",{className:"n"},canRun&&h("button",{className:"btn",onClick:()=>pick(p)},"Draft")))):
+          h("tr",null,h("td",{colSpan:3,className:"empty"},"No "+pos+" players left.")))))),
+    h("div",{className:"panel"},h("div",{className:"ph"},"Draft board"),
+      n===0?h("p",{className:"note",style:{padding:"0 14px"}},"No picks yet."):
+      h("table",{className:"st"},h("tbody",null,picks.map((k,i)=>{
+        const p=players.find(x=>x.id===k.pid),mi=MGRS.findIndex(m=>m.id===k.mgr);
+        return h("tr",{key:i},h("td",{className:"rk"},i+1),
+          h("td",null,h("div",{className:"pc"},h(Av,{name:MGRS[mi].name,i:mi}),h("span",{className:"tn"},MGRS[mi].name))),
+          h("td",null,p.name,h("span",{className:"note"}," · "+p.pos)),
+          h("td",{className:"n"},"Rd "+(Math.floor(i/MGRS.length)+1)));})))),
+    canRun&&startBox);
+}
+
+function Admin({players,setPlayers,reset,claims,names,release}){
+  const [url,setUrl]=useState("");
+  const [log,setLog]=useState(["Ready. Paste a MaxPreps team stats URL and press Sync Live Stats."]);
+  const [open,setOpen]=useState(false);
+  const [pid,setPid]=useState(players[0].id);
+  const player=players.find(p=>p.id==pid);
+  const [wk,setWk]=useState(WEEKS-1);
+  const [form,setForm]=useState({...players[0].w[WEEKS-1]});
+  const pick=(id,w=wk)=>{setPid(id);setWk(w);setForm({...players.find(p=>p.id==id).w[w]});};
+  const num=v=>Math.max(0,parseInt(v,10)||0);
+  const add=l=>setLog(x=>[...x,l]);
+  const sync=()=>{
+    if(!/^https?:\/\/(www\.)?maxpreps\.com\//i.test(url.trim())){add("Error: enter a full maxpreps.com team stats URL.");return;}
+    add("Sync requested for Week "+(wk+1)+": "+url.trim());
+    add("PROTOTYPE: no request sent. The Python backend (maxpreps_sync.py) will do this once it is hosted.");
+    add("Real sync will read that game's Passing, Rushing and Receiving tables and save each player's stats for Week "+(wk+1)+".");
+  };
+  const apply=()=>{
+    setPlayers(ps=>ps.map(p=>{if(p.id!=pid)return p;const w=p.w.map((x,i)=>i===wk?{...form}:x);return {...p,w,s:sumW(w),manual:true};}));
+    add("Manual override saved for "+player.name+", Week "+(wk+1)+": "+f1(score(form))+" pts.");setOpen(false);
+  };
+  return h("div",null,
+    h("div",{className:"card"},h("h2",null,"MaxPreps sync"),
+      h("label",null,"Week to sync",h("select",{value:wk,onChange:e=>pick(pid,+e.target.value),style:{maxWidth:200}},Array.from({length:WEEKS},(_,i)=>h("option",{key:i,value:i},"Week "+(i+1))))),
+      h("label",null,"MaxPreps Team Stats URL",h("input",{type:"url",value:url,placeholder:"https://www.maxpreps.com/mi/troy/troy-colts/football/stats/",onChange:e=>setUrl(e.target.value)})),
+      h("div",{className:"btns"},h("button",{className:"btn",onClick:sync},"Sync Live Stats"),
+        h("button",{className:"btn gold",onClick:()=>setOpen(!open)},open?"Close Manual Override":"Manual Override")),
+      h("div",{className:"log",role:"log"},log.map((l,i)=>h("div",{key:i,className:/^Error/.test(l)?"warn":""},"> "+l)))),
+    open&&h("div",{className:"card"},h("h2",null,"Manual override"),
+      h("p",{className:"note",style:{marginTop:0}},"Use this when a coach has not posted stats, or the MaxPreps page is empty or incomplete. Numbers replace the player's stats for the week you pick."),
+      h("label",null,"Week",h("select",{value:wk,onChange:e=>pick(pid,+e.target.value)},Array.from({length:WEEKS},(_,i)=>h("option",{key:i,value:i},"Week "+(i+1))))),
+      h("label",null,"Player",h("select",{value:pid,onChange:e=>pick(e.target.value)},players.map(p=>h("option",{key:p.id,value:p.id},p.name+" ("+p.pos+", "+p.school+")")))),
+      h("div",{className:"fields"},K.map(k=>h("label",{key:k},LBL[k],h("input",{type:"number",min:0,inputMode:"numeric",value:form[k],onChange:e=>setForm({...form,[k]:num(e.target.value)})})))),
+      h("div",{className:"preview"},"New score: "+f1(score(form))+" pts  (was "+f1(score(player.w[wk]))+")"),
+      h("div",{className:"btns"},h("button",{className:"btn",onClick:apply},"Save override"),h("button",{className:"btn ghost",onClick:()=>setOpen(false)},"Cancel"))),
+    h("div",{className:"card"},h("h2",null,"Team owners"),
+      h("p",{className:"note",style:{marginTop:0}},"Managers claim their own team when they open the league. Release a team to let someone else claim it."),
+      MGRS.map(m=>{const u=Object.keys(claims).find(x=>claims[x]===m.id);
+        return h("div",{key:m.id,style:{display:"flex",gap:10,alignItems:"center",padding:"6px 0",borderTop:"1px solid var(--line)"}},
+          h("strong",{className:"grow"},m.name),h("span",{className:"note"},u?(names[u]||"Someone"):"Unclaimed"),
+          u&&h("button",{className:"btn ghost",onClick:()=>release(u)},"Release"));})),
+    h("div",{className:"card"},h("h2",null,"Scoring rules"),
+      h("table",null,h("tbody",null,RULES.map(r=>h("tr",{key:r[0]},h("td",null,r[0]),h("td",{className:"n"},r[1]))))),
+      h("p",{className:"note"},"Passing yards count fractions (300 yds = 12.0 pts). Totals are rounded to one decimal."),
+      h("button",{className:"btn ghost",onClick:()=>{reset();setLog(["Demo data reset."]);}},"Reset demo data")));
+}
+
+const TSTAT={pending:"Waiting for response",accepted:"Accepted · awaiting commissioner",completed:"Completed",declined:"Declined",cancelled:"Cancelled",vetoed:"Vetoed by commissioner",invalid:"Failed · rosters changed"};
+const tname=id=>(MGRS.find(m=>m.id===id)||{name:"?"}).name;
+
+function Trades({players,trades,my,admin,tAdd,tSet,approve}){
+  const [fromSel,setFrom]=useState("m1"),[toSel,setTo]=useState("");
+  const [give,setGive]=useState([]),[get,setGet]=useState([]);
+  const f=my||fromSel;
+  const to=toSel&&toSel!==f?toSel:MGRS.find(m=>m.id!==f).id;
+  const pn=id=>(players.find(p=>p.id===id)||{name:"?"}).name;
+  const tog=(arr,set,id)=>set(arr.includes(id)?arr.filter(x=>x!==id):[...arr,id]);
+  const clear=()=>{setGive([]);setGet([]);};
+  const list=(ps,sel,set)=>ps.length?ps.map(p=>h("label",{key:p.id,className:"chk"},
+    h("input",{type:"checkbox",checked:sel.includes(p.id),onChange:()=>tog(sel,set,p.id),style:{width:"auto",margin:0}}),
+    h("span",null,p.name+" · "+p.pos+" · "+f1(score(p.s))+" pts"))):h("p",{className:"empty"},"No players on this team.");
+  const ok=give.length&&get.length&&(my||admin);
+  return h("div",null,
+    h("div",{className:"panel"},h("div",{className:"ph"},"Propose a trade"),
+      h("div",{style:{padding:14}},
+        (!my&&!admin)&&h("p",{className:"warn",style:{marginTop:0}},"Claim your team first, then you can propose trades."),
+        h("div",{className:"cols"},
+          h("label",null,"Your team",h("select",{value:f,disabled:!!my,onChange:e=>{setFrom(e.target.value);clear();}},MGRS.map(m=>h("option",{key:m.id,value:m.id},m.name)))),
+          h("label",null,"Trade with",h("select",{value:to,onChange:e=>{setTo(e.target.value);clear();}},MGRS.filter(m=>m.id!==f).map(m=>h("option",{key:m.id,value:m.id},m.name))))),
+        h("div",{className:"cols"},
+          h("div",null,h("strong",null,"You give"),list(players.filter(p=>p.mgr===f),give,setGive)),
+          h("div",null,h("strong",null,"You get"),list(players.filter(p=>p.mgr===to),get,setGet))),
+        h("div",{className:"btns"},h("button",{className:"btn",disabled:!ok,onClick:()=>{tAdd({from:f,to,give,get});clear();}},"Send trade offer")),
+        h("p",{className:"note"},"The other manager accepts or declines, then the commissioner approves it. Points follow each player to his new team."))),
+    h("div",{className:"panel"},h("div",{className:"ph"},"Trade offers"),
+      trades.length?trades.map(t=>{
+        const toMe=my===t.to,fromMe=my===t.from,acts=[];
+        if(t.status==="pending"){
+          if(toMe||admin)acts.push(h("button",{key:"a",className:"btn",onClick:()=>tSet(t.id,"accepted")},"Accept"),h("button",{key:"d",className:"btn ghost",onClick:()=>tSet(t.id,"declined")},"Decline"));
+          if(fromMe||admin)acts.push(h("button",{key:"c",className:"btn ghost",onClick:()=>tSet(t.id,"cancelled")},"Cancel"));
+        }
+        if(t.status==="accepted"&&admin)acts.push(h("button",{key:"p",className:"btn",onClick:()=>approve(t)},"Approve and process"),h("button",{key:"v",className:"btn ghost",onClick:()=>tSet(t.id,"vetoed")},"Veto"));
+        return h("div",{key:t.id,className:"trade"},
+          h("div",null,h("strong",null,tname(t.from)),h("span",null," gives "+t.give.map(pn).join(", ")),h("br"),h("strong",null,tname(t.to)),h("span",null," gives "+t.get.map(pn).join(", "))),
+          h("div",{className:"note"},TSTAT[t.status]||t.status),
+          acts.length>0&&h("div",{className:"btns"},acts));}):
+      h("p",{className:"note",style:{padding:"0 14px"}},"No trade offers yet.")));
+}
+
+function App(){
+  const [tab,setTab]=useState("standings");
+  const [league,setLeague]=useState(()=>({players:RAW.map(mk),picks:null,order:MGRS.map(m=>m.id)}));
+  const [conn,setConn]=useState("demo"); // demo (not shared) | loading | live | empty
+  const [who,setWho]=useState({uid:null,admin:true});
+  const [claims,setClaims]=useState({});
+  const [names,setNames]=useState({});
+  const [trades,setTrades]=useState([]);
+  const [want,setWant]=useState("");
+  const R=useRef({db:null,user:null,dirty:false});
+  const {players,picks,order}=league;
+  const upd=fn=>{R.current.dirty=true;setLeague(l=>({...l,...fn(l)}));};
+  const setPlayers=f=>upd(l=>({players:typeof f==="function"?f(l.players):f}));
+  const setPicks=v=>upd(()=>({picks:v}));
+  const setOrder=v=>upd(()=>({order:v}));
+  const my=who.uid?claims[who.uid]:null;
+
+  // Connect to the shared league (only works when the page is opened through claude.ai sharing).
+  useEffect(()=>{
+    let dead=false;const offs=[];
+    (async()=>{
+      const cl=window.claude;if(!cl||!cl.use)return;
+      const [db,user]=await Promise.all([cl.use("db"),cl.use("user")]);
+      if(dead||!db)return;
+      R.current.db=db;R.current.user=user;setConn("loading");
+      let uid=null,admin=false;
+      if(user){try{uid=await user.id();}catch(e){} try{admin=await user.canEdit();}catch(e){}}
+      setWho({uid,admin});
+      offs.push(db.doc("league/main").onSnapshot(sn=>{
+        if(sn.exists){R.current.dirty=false;setLeague(sn.data());setConn("live");}else setConn("empty");
+      },()=>setConn("demo")));
+      offs.push(db.collection("claims").onSnapshot(q=>{const m={};q.docs.forEach(d=>m[d.id]=d.data().mgr);setClaims(m);}));
+      offs.push(db.collection("trades").onSnapshot(q=>setTrades(q.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.ts-a.ts))));
+    })();
+    return()=>{dead=true;offs.forEach(f=>f());};
+  },[]);
+
+  // Commissioner changes are saved to the shared league.
+  useEffect(()=>{
+    const r=R.current;
+    if(r.dirty&&r.db&&who.admin&&conn==="live"){r.dirty=false;r.db.doc("league/main").set(league).catch(()=>{});}
+  },[league]);
+
+  // Show owner names for claimed teams.
+  useEffect(()=>{
+    const u=R.current.user,ids=Object.keys(claims);
+    if(!u||!ids.length)return;
+    u.profiles(ids).then(ps=>{const m={};ids.forEach(i=>m[i]=ps[i]&&ps[i].name);setNames(m);}).catch(()=>{});
+  },[claims]);
+
+  const db=()=>R.current.db;
+  const tAdd=t=>{const d={...t,status:"pending",ts:Date.now(),by:who.uid};
+    if(db())db().collection("trades").add(d).catch(()=>{});else setTrades(x=>[{id:"l"+x.length,...d},...x]);};
+  const tSet=(id,status)=>{
+    if(db())db().doc("trades/"+id).update({status}).catch(()=>{});else setTrades(x=>x.map(t=>t.id===id?{...t,status}:t));};
+  const approve=t=>{
+    const has=(ids,m)=>ids.every(id=>{const p=players.find(x=>x.id===id);return p&&p.mgr===m;});
+    if(!has(t.give,t.from)||!has(t.get,t.to)){tSet(t.id,"invalid");return;}
+    setPlayers(ps=>ps.map(p=>t.give.includes(p.id)?{...p,mgr:t.to}:t.get.includes(p.id)?{...p,mgr:t.from}:p));
+    tSet(t.id,"completed");
+  };
+  const claim=()=>{const taken=Object.values(claims);
+    if(want&&!taken.includes(want)&&db())db().doc("claims/"+who.uid).set({mgr:want}).catch(()=>{});};
+  const release=u=>{if(db())db().doc("claims/"+u).delete().catch(()=>{});};
+
+  const tabs=[["standings","League Standings"],["scoreboard","Scoreboard"],["rosters","My Team Rosters"],["draft","Draft Room"],["trades","Trades"],["admin","Admin Control Panel"]]
+    .filter(t=>t[0]!=="admin"||who.admin);
+  const status={demo:"Demo mode · not shared",loading:"Connecting…",live:"Live league",empty:"League not set up yet"}[conn];
+  const canRun=conn==="demo"||who.admin;
+  const free=MGRS.filter(m=>!Object.values(claims).includes(m.id));
+  return h("div",null,
+    h("header",{className:"top"},
+      h("div",{className:"navbar"},h("span",{className:"logo"},"FNF"),h("span",{className:"brand"},"Friday Night Fantasy"),h("span",{className:"season"},status)),
+      h("nav",{className:"tabs",role:"tablist"},tabs.map(t=>h("button",{key:t[0],role:"tab",className:"tab","aria-selected":tab===t[0],onClick:()=>setTab(t[0])},t[1])))),
+    h("main",{className:"wrap"},
+      conn==="empty"&&h("div",{className:"card"},"The commissioner has not loaded this league yet. Check back soon."),
+      (conn==="live"&&who.uid&&!my)&&h("div",{className:"card"},h("strong",null,"Which team is yours?"),
+        h("div",{className:"btns"},h("select",{value:want,onChange:e=>setWant(e.target.value),style:{width:"auto"},"aria-label":"Your team"},
+          h("option",{value:""},"Choose a team"),free.map(m=>h("option",{key:m.id,value:m.id},m.name))),
+          h("button",{className:"btn",disabled:!want,onClick:claim},"This is my team"))),
+      tab==="standings"&&h(Standings,{players}),
+      tab==="scoreboard"&&h(Scoreboard,{players}),
+      tab==="rosters"&&h(Rosters,{players,my,key:my||"none"}),
+      tab==="draft"&&h(Draft,{players,setPlayers,picks,setPicks,order,setOrder,canRun}),
+      tab==="trades"&&h(Trades,{players,trades,my,admin:canRun,tAdd,tSet,approve}),
+      tab==="admin"&&h(Admin,{players,setPlayers,claims,names,release,reset:()=>{setPlayers(RAW.map(mk));setPicks(null);}})));
+}
+ReactDOM.createRoot(document.getElementById("root")).render(h(App));
+</script>
+</body>
+</html>
